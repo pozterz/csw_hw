@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>kUUUUUUUUUUy</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="/assets/css/style.css" crossorigin="anonymous">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+        <script src="//code.jquery.com/jquery.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="col-md-5">
+            <form action="/" method="post">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="name" placeholder="Name (String)">
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="num1" placeholder="Num 1">
+                        <span class="input-group-addon">Integer</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="num2" placeholder="Num 2">
+                        <span class="input-group-addon">Integer</span>
+                    </div>
+                </div>
+                <br/>
+                <input type="hidden" name="mode" id="hid_mode" value="+">
+                <button class="btn btn-success">I want to know the result :D</button>
+            </form>
+            <br/>
+             <h3><button id="mode" class="btn btn-warning">mode</button>
+                <span class="label label-info" id="display_mode">+</span></h3>
+
+                <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Hello : <span class="gradient">  <strong><%= names %></strong> </span></h3>
+                </div>
+                  <div class="panel-body">
+                        <strong>
+                        Num 1 : <span class="gradient"><%= num1 %></span>
+                        <br/>
+                        <br/>
+                        Num 2 : <span class="gradient"><%= num2 %></span>
+                        <br/>
+                        <br/>
+                        <div class="alert alert-<%= alerttype %>" role="alert"><%= num1 %>
+                         &nbsp;<span class="label label-danger"><%= mode %></span>&nbsp;
+                         <%= num2 %> = <%= str %></div>
+                        </strong>
+                    </div>
+                </div>
+        </div>
+        <div class="col-md-2"></div>
+        <div class="col-md-5">
+            <% k.forEach(function(res){ %>
+               <%= res.name + " : " + res.num1 + " " + res.mode + " " + res.num2 + " = " + res.result %> <br/>
+            <% }); %>
+        </div>
+    </div>
+</body>
+<script>
+var arr = ['+','-','*','/'];
+var i = 0;
+    $('#mode').click(function(){
+        i++;
+        $('#display_mode').text(''+arr[i%4]);
+        $('#hid_mode').val(''+arr[i%4]);
+    });
+</script>
+<!-- Latest compiled and minified CSS & JS -->
+
+
+</html>

@@ -1,0 +1,22 @@
+<table class="table table-hover">
+		<tr>
+
+			<th><h1 class="gradient">Name</h1></th>
+			<th><h1 class="gradient">Price</h1></th>
+			<th><h1 class="gradient">Amount</h1></th>
+			
+		<tr>
+	<tbody>
+	<% function random (low, high) {
+    	return parseInt(Math.random() * (high - low) + low);
+	} %>
+	<% fruitlist.forEach(function(fruit){ %>
+		<tr class="<%= colors[random(0,4)] %>">
+			<td><h2 class="gradient"> <%= fruit.name  %> </h2></td>
+			<td><h2 class="gradient"> <%= fruit.price  %> </h2></td>
+			<td><h2 class="gradient"> <%= fruit.amount  %> </h2></td>
+		</tr>
+	<% }); %>
+	
+	</tbody>
+</table>
