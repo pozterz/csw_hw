@@ -54,6 +54,7 @@ app.get('/',function(req,res){
 //   ^
 // ***************************************************** //
 
+
 app.post('/',bodyparser,function(req,res){
 
 	 name = req.body.name;
