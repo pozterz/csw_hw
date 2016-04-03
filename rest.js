@@ -1,7 +1,6 @@
 var express = require('express')
 var app = express() 
 var router = express.Router() 
-var bodyParser = require('body-parser')
 
 app.set('views','./public')
 app.set('view engine','ejs')
