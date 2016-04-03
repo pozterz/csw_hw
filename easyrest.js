@@ -20,14 +20,7 @@ router.route('/')
 	res.json({data:oreo})
 })
 .post(function(req,res){
-	var tmp = [{
-		'id' : null,
-	    'name' : null,
-	    'num1' : null,
-	    'num2' : null,
-	    'mode' : null,
-	    'result' : null
-	}]
+	var tmp = {}
 	tmp.id = req.body.id
 	tmp.name = req.body.name
 	tmp.num1 = req.body.num1
