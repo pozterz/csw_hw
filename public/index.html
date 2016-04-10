@@ -90,9 +90,9 @@
                         ID : {{s.id}} | Name: {{s.name}} | {{s.num1}}{{s.mode}}{{s.num2}} = {{s.result}}     
                     </font>
                     <!-- ADDDDDDDDDDD ng-if -->       
-                    <button type="submit" ng-click="get(s.id)"> Get </button>
-                    <button type="submit" ng-click="edit(s.id)"> Edit </button>
-                    <button type="submit" ng-click="delete(s.id)"> Delete </button>
+                    <button type="submit" class="btn btn-success" ng-click="get(s.id)"> Get </button>
+                    <button type="submit" class="btn btn-warning" ng-click="edit(s.id)"> Edit </button>
+                    <button type="submit" class="btn btn-danger" ng-click="delete(s.id)"> Delete </button><br/><br/>
                 </li>
             </ul>
         </div>
@@ -118,6 +118,7 @@
                 //get specific id
                 Arr.get({oreo_id:id}, function(a) {
                     $scope.result = a
+                    $scope.message = "Get data ID : " + id
                 })
             }
             $scope.chmode = function(){
@@ -148,8 +149,8 @@
                     $scope.editArr.num1 = bear.num1
                     $scope.editArr.num2 = bear.num2
                     $scope.mode = bear.mode
-                    $scope.result = "Retrived data id " + id
-                    $scope.message = 'Edited bear ' +  id
+                    $scope.result = bear
+                    $scope.message = 'Edit bear ' +  id
                 })
             }
             // update
