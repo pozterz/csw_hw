@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>kUUUUUUUUUUy</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="/assets/css/style.css" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-resource.min.js"></script>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+        <script src="//code.jquery.com/jquery.js"></script>
+</head>
+
+<body>
+    <div ng-app="CalApp" ng-controller="CalCtrl" class="container">
+        <div class="col-md-5">
+          
+                <div class="form-group">
+                    <input type="text" class="form-control" name="name" id="name" ng-model="addOreo.name" placeholder="Name (String)">
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="num1"  id="name1" ng-model="addOreo.num1" placeholder="Num 1">
+                        <span class="input-group-addon">Integer</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="num2"  id="name2" ng-model="addOreo.num2" placeholder="Num 2">
+                        <span class="input-group-addon">Integer</span>
+                    </div>
+                </div>
+                <br/>
+                <button class="btn btn-success" ng-click="add()">I want to know the result :D</button>
+           
+            <br/>
+             <h3><button id="smode" class="btn btn-warning" ng-click="chmode()">mode</button>
+                <span class="label label-info" id="display_mode">{{mode}}</span></h3>
+                <h2>Edit !!</h2>
+                <div class="form-group">
+                     <input type="hidden" id="id" ng-model="editArr.id">
+                    <input type="text" class="form-control" name="name" ng-model="editArr.name" placeholder="Name (String)">
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="num1" ng-model="editArr.num1" placeholder="Num 1">
+                        <span class="input-group-addon">Integer</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="num2" ng-model="editArr.num2" placeholder="Num 2">
+                        <span class="input-group-addon">Integer</span>
+                    </div>
+                </div>
+                <br/>
+                <button class="btn btn-success" ng-click="update(editArr.id)">I want to know the result :D</button>
+                <!-- <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Hello : <span class="gradient">  <strong><%= names %></strong> </span></h3>
+                </div>
+                  <div class="panel-body">
+                        <strong>
+                        Num 1 : <span class="gradient"><%= num1 %></span>
+                        <br/>
+                        <br/>
+                        Num 2 : <span class="gradient"><%= num2 %></span>
+                        <br/>
+                        <br/>
+                        <div class="alert alert-<%= alerttype %>" role="alert"><%= num1 %>
+                         &nbsp;<span class="label label-danger"><%= mode %></span>&nbsp;
+                         <%= num2 %> = <%= str %></div>
+                        </strong>
+                    </div>
+                </div> -->
+        </div>
+        <div class="col-md-7">
+        <h2>Restful:</h2> 
+        <b> Result: </b> {{result}} <br>
+        <b> Message: </b> {{message}} <br>
+            <ul>
+                <li ng-repeat="s in getall track by $index" ng-if="!isEmpty(s)" >
+                    <font color="red" ng-if="select($index,result)">
+                        ID : {{s.id}} | Name: {{s.name}} | {{s.num1}}{{s.mode}}{{s.num2}} = {{s.result}}         
+                    </font>
+                    <font color="blue" ng-if="!select($index,result)">
+                        ID : {{s.id}} | Name: {{s.name}} | {{s.num1}}{{s.mode}}{{s.num2}} = {{s.result}}     
+                    </font>                 
+                    <button type="submit" ng-click="get(s.id)"> Get </button>
+                    <button type="submit" ng-click="edit(s.id)"> Edit </button>
+                    <button type="submit" ng-click="delete(s.id)"> Delete </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+
+    <script type="text/javascript">
+        var app = angular.module("CalApp",['ngResource'])
+        app.controller("CalCtrl", function($scope, $resource){
+            var Arr = $resource('/api/test/:oreo_id',{oreo_id: '@id'},
+                { 
+                    update: {method:'PUT' } 
+                })
+            $scope.addOreo = {}
+            $scope.editArr = {}
+            $scope.result = {}
+            var arr = ['+','-','*','/'];
+            var i = 0;
+            $scope.mode = arr[0];
+            $scope.getall = Arr.query()
+            $scope.get = function(id) {
+                Arr.get({oreo_id:id}, function(a) {
+                    $scope.result = a
+                })
+            }
+            $scope.chmode = function(){
+                
+                i++;
+                $scope.mode = arr[i%4];
+            }
+            $scope.add =  function() {
+               //  var givenBear = new Bear($scope.addBear)
+                // givenBear.$save(function(data){ 
+                //     console.log(data.message)                    
+                // })
+                  
+                Arr.save({name: $scope.addOreo.name, 
+                         num1: $scope.addOreo.num1,
+                         num2: $scope.addOreo.num2,
+                         mode: $scope.mode
+                     })
+                $scope.message = "Added";
+                $scope.getall = Arr.query()
+            }
+            $scope.edit = function(id) {
+                Arr.get({oreo_id:id}, function(bear) {
+                    console.log(id) 
+                    $scope.editArr.id = id
+                    $scope.editArr.name = bear.name
+                    $scope.editArr.num1 = bear.num1
+                    $scope.editArr.num2 = bear.num2
+                    $scope.mode = bear.mode
+                    $scope.result = "Retrived data id " + id
+                    $scope.message = 'Edited bear ' +  id
+                })
+            }
+            $scope.update = function(id) {
+                Arr.update( {oreo_id: id}, { 
+                         name: $scope.editArr.name, 
+                         num1: $scope.editArr.num1,
+                         num2: $scope.editArr.num2,
+                         mode: $scope.mode})                
+                $scope.result = 'Update ' + id
+                $scope.getall = Arr.query()
+            }
+            $scope.delete = function(id) {
+                Arr.delete( {oreo_id: id})
+                $scope.result = 'Deleted ' + id
+                $scope.getall = Arr.query()
+            }
+            $scope.isEmpty = function(bear) {
+                return Object.keys(bear).length == 0
+            }
+            $scope.select = function(id, bear) {
+                return id == bear.id
+            }
+        })
+    </script>
+<!-- Latest compiled and minified CSS & JS -->
+
+
+</html>

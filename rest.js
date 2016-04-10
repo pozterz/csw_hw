@@ -2,14 +2,13 @@ var express = require('express')
 var app = express() 
 var router = express.Router() 
 
-app.set('views','./public')
-app.set('view engine','ejs')
+app.use(express.static(__dirname+'/public'));
 app.use('/assets',express.static(__dirname+'/assets'));
 var bodyparser = require('body-parser')
-bodyparser = bodyparser.urlencoded({extended: false});
+//bodyparser = bodyparser.urlencoded({extended: false});
 
 var oreo = [{
-	'id' : '0',
+	'id' : 0,
     'name' : 'Tester',
     'num1' : 1,
     'num2' : 2,
@@ -22,11 +21,9 @@ var name = null;
 var num1 = null;
 var num2 = null;
 var mode = null;
-var string = null;
-var alerttype = null;
 var ans = null;
 
-router.route('/') 
+router.route('/test') 
 	// post new bear
   .post(function(req, res) { 
      id = uid;
@@ -37,8 +34,6 @@ router.route('/')
 	console.log(mode);
 	console.log(oreo);
 
-	 string = "";
-	 alerttype = "";
 	// Error type check
 
 	if(name === "") name = "ไม่มีชื่อ";
@@ -46,7 +41,6 @@ router.route('/')
 	// End error type check
 
 	//Calculate
-	 ans;
 	switch(mode){
 		case '+':ans = num1+num2;
 		break;
@@ -58,42 +52,33 @@ router.route('/')
 		break;
 		default : ans = 0;
 	}
-	alerttype = "info";
-	string = ""+ans;
+	
 // ***************************************************** //
 //   v
 //   v
 //   v
 //   v
 
-    var tmp = [{
-    	'id' : null,
-        'name' : null,
-        'num1' : null,
-        'num2' : null,
-        'mode' : null,
-        'result' : null
-    }];
-    tmp.id = uid;
+    var tmp = {}
+    tmp.id = ++uid;
     tmp.name = name;
     tmp.num1 = num1;
     tmp.num2 = num2;
     tmp.mode = mode;
     tmp.result = ans;
     oreo.push(tmp);
-    uid++;
-    res.render('index',{k : oreo,alerttype:alerttype,str:string,num1:num1,num2:num2,names:name,mode:mode})
+    res.json({message: 'Added'})
   })
 
   // get all bears
   .get(function(req,res) {
-  	res.render('index',{k : oreo,alerttype:alerttype,str:string,num1:num1,num2:num2,names:name,mode:mode})
+  	res.json(oreo)
   })
 
-router.route('/:oreo_id')
+router.route('/test/:oreo_id')
 	// show a bear
 	.get(function(req,res) {
-		res.render('show',{k : oreo[req.params.oreo_id]})
+		res.json(oreo[req.params.oreo_id])
 	})
 
 	// update a bear
@@ -104,14 +89,13 @@ router.route('/:oreo_id')
 		oreo[id].num2 = parseInt(req.body.num2);
 		oreo[id].mode = req.body.mode
 		
-	name = req.body.name;
+	 name = req.body.name;
 	 num1 = parseInt(req.body.num1);
 	 num2 = parseInt(req.body.num2);
 	 mode = req.body.mode;
 	console.log(mode);
 
-	 string = "";
-	 alerttype = "";
+	
 	// Error type check
 
 	if(name === "") name = "ไม่มีชื่อ";
@@ -119,7 +103,7 @@ router.route('/:oreo_id')
 	// End error type check
 
 	//Calculate
-	 ans;
+	
 	switch(mode){
 		case '+':ans = num1+num2;
 		break;
@@ -131,9 +115,8 @@ router.route('/:oreo_id')
 		break;
 		default : ans = 0;
 	}
-	alerttype = "info";
-	string = ""+ans;
-	oreo[id].result = req.body.ans
+	
+		oreo[id].result = ans
 		res.json({message: 'Updated!'})
 	})
 
@@ -145,8 +128,8 @@ router.route('/:oreo_id')
 	})
 
 // all of our routes will be prefixed with /api 
-// app.use('/api', bodyParser.json(), router)
-app.use('/api',bodyparser, router)
+ app.use('/api', bodyparser.json(), router)
+//app.use('/api',bodyparser, router)
 
 app.listen(5555, function (){
 	console.log('Server is running...')

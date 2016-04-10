@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Restful</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-resource.min.js"></script>
+
+</head>
+<body>
+ 	<div ng-app="CalApp" ng-controller="CalCtrl">
+ 		<h2>Bear Restful:</h2> 
+ 		<b> Result: </b> {{result}} <br>
+ 		<b> Message: </b> {{message}} <br>
+ 		<ul>
+ 			<li ng-repeat="bear in bears track by $index" ng-if="!isEmpty(bear)" >
+ 				<font color="red" ng-if="select($index,result)">
+ 					{{bear}}		
+ 				</font>
+ 				<font color="blue" ng-if="!select($index,result)">
+ 					{{bear}}	
+ 				</font> 				
+ 				<button type="submit" ng-click="get(bear.id)"> Get </button>
+ 				<button type="submit" ng-click="edit(bear.id)"> Edit </button>
+ 				<button type="submit" ng-click="delete(bear.id)"> Delete </button>
+ 			</li>
+ 		</ul> 	
+
+ 		<h2>Add New Bear</h2>
+ 		<label for="name">Name: </label>
+ 		<input type="text" id="name" ng-model="addBear.name"><br>
+ 		<label for="weight">Weight: </label>
+ 		<input type="text" id="name" ng-model="addBear.weight"><br> 		
+ 		<button ng-click="add()">Add</button>
+
+ 		<h2>Edit New Bear</h2>
+ 		<input type="hidden" id="id" ng-model="editBear.id">
+ 		<label for="name">Name: </label>
+ 		<input type="text" id="name" ng-model="editBear.name"><br>
+ 		<label for="weight">Weight: </label>
+ 		<input type="text" id="name" ng-model="editBear.weight"><br> 		
+ 		<button ng-click="update(editBear.id)">Update</button>
+
+
+ 	</div>
+
+ 	<script type="text/javascript">
+ 		var app = angular.module("CalApp",['ngResource'])
+ 		app.controller("CalCtrl", function($scope, $resource){
+ 			var Arr = $resource('/api/:oreo_id',{oreo_id: '@id'},
+ 				{ 
+ 					update: {method:'PUT' }	
+ 				})
+ 			$scope.editArr = {}
+ 			$scope.result = {}
+ 			$scope.all = Arr.query()
+ 			$scope.get = function(id) {
+ 				Arr.get({oreo_id:id}, function(arrays) {
+ 					$scope.result = arrays
+ 				})
+ 			}	
+ 			$scope.add =  function() {
+ 			   //  var givenBear = new Bear($scope.addBear)
+			    // givenBear.$save(function(data){ 
+			    //     console.log(data.message)			        
+			    // }) 
+			    Arr.save({name: $scope.addBear.name, 
+			    		 weight: $scope.addBear.weight})
+			    $scope.bears = Bear.query()
+ 			}
+ 			$scope.edit = function(id) {
+ 				Bear.get({bear_id:id}, function(bear) {
+ 					//$scope.mycolor = blue;
+ 					$scope.editBear.id = id
+ 					$scope.editBear.name = bear.name
+ 					$scope.editBear.weight = bear.weight
+ 					$scope.result = bear
+ 					$scope.message = 'Edited bear ' +  id
+ 				})
+ 			}
+ 			$scope.update = function(id) {
+ 				Bear.update( {bear_id: id}, { name: $scope.editBear.name, 
+ 											weight: $scope.editBear.weight}) 				
+ 				$scope.result = 'Update bear ' + id
+ 				$scope.bears = Bear.query()
+ 			}
+ 			$scope.delete = function(id) {
+ 				Bear.delete( {bear_id: id})
+ 				$scope.result = 'Delete bear ' + id
+ 				$scope.bears = Bear.query()
+ 			}
+ 			$scope.isEmpty = function(bear) {
+ 				return Object.keys(bear).length == 0
+ 			}
+ 			$scope.select = function(id, bear) {
+ 				return id == bear.id
+ 			}
+ 		})
+ 	</script>
+
+</body>
+</html>
